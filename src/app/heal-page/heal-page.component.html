@@ -1,0 +1,98 @@
+<h1>Heal</h1>
+<div *ngIf="!shouldChangeLayout()">
+  <p>
+    Feeling tired after your battle, you stop by the healer's building to
+    restore your health. A friendly woman working over a large cauldron greets
+    you.
+  </p>
+
+  <!-- woman image -->
+
+  <p>
+    "Hello, warrior! I hear you're going to fight the Demonlord for us. I can
+    heal you here, but I think it'd be better if you learned a spell to heal
+    yourself in battle.
+  </p>
+
+  <p>
+    However, I've been busy making potions to send to the armies on the
+    frontlines too and haven't had a chance to restock my supply. Could you find
+    me these ingredients, please? I can teach you the spell after.
+  </p>
+
+  <p>Here are the ingredients I need."</p>
+
+  <img
+    *ngIf="!isMushroomUnlocked()"
+    src="assets/redMushroomCropBW.jpg"
+    alt="Red Mushroom"
+    style="width: 200px; height: 200px"
+  />
+
+  <img
+    *ngIf="isMushroomUnlocked()"
+    src="assets/redMushroomCrop.jpg"
+    alt="Red Mushroom"
+    style="width: 200px; height: 200px"
+  />
+
+  <img
+    *ngIf="!isGingerRootUnlocked()"
+    src="assets/gingerRootBW.PNG"
+    alt="Ginger Root"
+    style="width: 200px; height: 200px"
+  />
+
+  <img
+    *ngIf="isGingerRootUnlocked()"
+    src="assets/gingerRoot.PNG"
+    alt="Ginger Root"
+    style="width: 200px; height: 200px"
+  />
+
+  <img
+    *ngIf="!isChamomileUnlocked()"
+    src="assets/chamomileCropBW.jpg"
+    alt="Chamomile"
+    style="width: 200px; height: 200px"
+  />
+
+  <img
+    *ngIf="isChamomileUnlocked()"
+    src="assets/chamomileCrop.jpg"
+    alt="Chamomile"
+    style="width: 200px; height: 200px"
+  />
+
+  <img
+    *ngIf="!isLavenderUnlocked()"
+    src="assets/lavenderCropBW.jpg"
+    alt="Lavender"
+    style="width: 200px; height: 200px"
+  />
+
+  <img
+    *ngIf="isLavenderUnlocked()"
+    src="assets/lavenderCrop.jpg"
+    alt="Lavender"
+    style="width: 200px; height: 200px"
+  />
+</div>
+
+<div *ngIf="shouldChangeLayout()">
+  <p>The woman is delighted to see you return with the ingredients.</p>
+  <p>
+    "Thank you, this will go a long way to helping our soldiers on the
+    frontlines."
+  </p>
+  <p>
+    "Here is the incantation for the spell. May it prove handy should you need
+    it."
+  </p>
+  <p>
+    <button routerLink="/unlock-page" [queryParams]="{ thingtounlock: 'HEAL' }">
+      Unlock the heal spell
+    </button>
+  </p>
+</div>
+<p><button routerLink="">Back to Spellbook</button></p>

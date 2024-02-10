@@ -1,0 +1,29 @@
+<div *ngIf="!allMonstersDefeated && !playerDefeated">
+  <p>A group of monsters approach!</p>
+
+  <p>{{ playerHp }} Player health</p>
+
+  <div *ngFor="let monster of monsters; let i = index">
+    <div *ngIf="!monster.monsterDefeated">
+      <p>
+        Monster {{ i + 1 }} ({{ monster.type }}) health: {{ monster.monsterHp }}
+      </p>
+      <button
+        (click)="attack(i)"
+        class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+      >
+        Attack Monster {{ i + 1 }}
+      </button>
+    </div>
+  </div>
+  <button>Spell</button>
+  <button>???</button>
+  <button (click)="confirmRun()">Run</button>
+</div>
+
+<div><p *ngIf="allMonstersDefeated">Monster(s) defeated!</p></div>
+<div><p *ngIf="playerDefeated">Player defeated!</p></div>
+
+<p>
+  <u><button routerLink="">Back to Spellbook</button></u>
+</p>
