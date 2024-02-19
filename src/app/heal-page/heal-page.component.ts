@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
-import { UNLOCK, UnlocksService } from '../unlocks.service';
+import { UnlocksService } from '../unlocks.service';
+import { Unlockables } from '../spells';
 
 @Component({
   selector: 'app-heal-page',
@@ -10,22 +11,22 @@ export class HealComponent {
   constructor(public unlocksService: UnlocksService) {}
 
   isMushroomUnlocked() {
-    return this.unlocksService.isUnlocked(UNLOCK.MUSHROOM);
+    return this.unlocksService.isUnlocked(Unlockables.Mushroom);
   }
 
   isGingerRootUnlocked() {
-    return this.unlocksService.isUnlocked(UNLOCK.GINGERROOT);
+    return this.unlocksService.isUnlocked(Unlockables.GingerRoot);
   }
 
   isChamomileUnlocked() {
-    return this.unlocksService.isUnlocked(UNLOCK.CHAMOMILE);
+    return this.unlocksService.isUnlocked(Unlockables.Chamomile);
   }
 
   isLavenderUnlocked() {
-    return this.unlocksService.isUnlocked(UNLOCK.LAVENDER);
+    return this.unlocksService.isUnlocked(Unlockables.Lavender);
   }
 
   shouldChangeLayout() {
-    return this.unlocksService.isHealUnlocked();
+    return this.unlocksService.isUnlocked(Unlockables.Heal);
   }
 }

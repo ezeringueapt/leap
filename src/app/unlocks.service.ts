@@ -1,81 +1,54 @@
 import { Injectable } from '@angular/core';
+import { Unlockables } from './spells';
 
 const LOCAL_STORAGE_KEY = 'cookie';
-export enum UNLOCK {
-  MUSHROOM = 'MUSHROOM',
-  GINGERROOT = 'GINGERROOT',
-  CHAMOMILE = 'CHAMOMILE',
-  LAVENDER = 'LAVENDER',
-  GALE = 'GALE',
-  BLUESTONE = 'BLUESTONE',
-  EATINGPLANT = 'EATINGPLANT',
-  RAINBOWFISH = 'RAINBOWFISH',
-  HEAL = 'HEAL',
-}
-
-enum SpellOrItem {
-  SPELL,
-  ITEM,
-}
-
-const spellOrItemMap = {
-  [UNLOCK.GALE]: SpellOrItem.SPELL,
-  [UNLOCK.MUSHROOM]: SpellOrItem.ITEM,
-  [UNLOCK.CHAMOMILE]: SpellOrItem.ITEM,
-  [UNLOCK.GINGERROOT]: SpellOrItem.ITEM,
-  [UNLOCK.LAVENDER]: SpellOrItem.ITEM,
-  [UNLOCK.BLUESTONE]: SpellOrItem.ITEM,
-  [UNLOCK.EATINGPLANT]: SpellOrItem.ITEM,
-  [UNLOCK.RAINBOWFISH]: SpellOrItem.ITEM,
-  [UNLOCK.HEAL]: SpellOrItem.SPELL,
-};
-
 @Injectable({
   providedIn: 'root',
 })
 export class UnlocksService {
-  private unlockedStuff: Record<UNLOCK, boolean> = JSON.parse(
+  private unlockedStuff: Record<string, boolean> = JSON.parse(
     localStorage.getItem(LOCAL_STORAGE_KEY) || '{}'
   );
 
-  countOfSpellsUnlocked() {
-    return Object.entries(this.unlockedStuff).reduce((count, [key, value]) => {
-      if (value && spellOrItemMap[key as UNLOCK] === SpellOrItem.SPELL) {
-        count = count + 1;
-      }
-      return count;
-    }, 0);
-  }
+  private unlockedClasses = Object.fromEntries(
+    Object.entries(this.unlockedStuff).map(([className]) => [
+      className,
+      spellNameToSpellClass(className),
+    ])
+  );
 
-  unlock(key: UNLOCK) {
+  unlock(key: string) {
     this.unlockedStuff[key] = true;
+    this.unlockedClasses[key] = spellNameToSpellClass(key);
     localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(this.unlockedStuff));
+    return this.unlockedClasses[key];
   }
 
-  isUnlocked(unlock: UNLOCK) {
-    return this.unlockedStuff[unlock];
+  isUnlocked<T extends Unlockables.Unlockable>(
+    unlock: new (...args: any[]) => T
+  ) {
+    return this.unlockedStuff[unlock.name];
   }
 
-  isMultipleUnlocked(unlocks: UNLOCK[]) {
+  isMultipleUnlocked(
+    unlocks: (new (...args: any[]) => Unlockables.Unlockable)[]
+  ) {
     return unlocks.map((unlock) => this.isUnlocked(unlock)).every(Boolean);
   }
 
-  isHealUnlocked() {
-    return this.isMultipleUnlocked([
-      UNLOCK.MUSHROOM,
-      UNLOCK.GINGERROOT,
-      UNLOCK.CHAMOMILE,
-      UNLOCK.LAVENDER,
-    ]);
+  getUnlockedSpells(): Unlockables.Spell[] {
+    return Object.values(this.unlockedClasses).filter((unlockable) =>
+      isSpell(unlockable)
+    ) as Unlockables.Spell[];
   }
-  isGaleUnlocked() {
-    return this.isMultipleUnlocked([UNLOCK.GALE]);
-  }
-  isMinimizeUnlocked() {
-    return this.isMultipleUnlocked([
-      UNLOCK.BLUESTONE,
-      UNLOCK.EATINGPLANT,
-      UNLOCK.RAINBOWFISH,
-    ]);
-  }
+}
+
+function spellNameToSpellClass(spellName: string): Unlockables.Unlockable {
+  return new (<any>Unlockables)[spellName]();
+}
+
+function isSpell(
+  unlockable: Unlockables.Unlockable
+): unlockable is Unlockables.Spell {
+  return (unlockable as Unlockables.Spell).action !== undefined;
 }

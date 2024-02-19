@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
-import { UNLOCK, UnlocksService } from '../unlocks.service';
+import { UnlocksService } from '../unlocks.service';
+import { Unlockables } from '../spells';
 
 @Component({
   selector: 'app-minimize-page',
@@ -9,14 +10,14 @@ import { UNLOCK, UnlocksService } from '../unlocks.service';
 export class MinimizePageComponent {
   constructor(public unlocksService: UnlocksService) {}
   isBlueStoneUnlocked() {
-    return this.unlocksService.isUnlocked(UNLOCK.BLUESTONE);
+    return this.unlocksService.isUnlocked(Unlockables.BlueStone);
   }
 
   isEatingPlantUnlocked() {
-    return this.unlocksService.isUnlocked(UNLOCK.EATINGPLANT);
+    return this.unlocksService.isUnlocked(Unlockables.EatingPlant);
   }
 
   isRainbowFishUnlocked() {
-    return this.unlocksService.isUnlocked(UNLOCK.RAINBOWFISH);
+    return this.unlocksService.isUnlocked(Unlockables.RainbowFish);
   }
 }

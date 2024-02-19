@@ -1,5 +1,11 @@
 import { Component } from '@angular/core';
-import { Router, RouterLink } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
+import { PlayerService } from './player.service';
+import { Monster } from './monsters';
+import { EncounterTableService } from './encounter-table';
+import { Pages } from '../app-routing.module';
+import { UnlocksService } from '../unlocks.service';
+import { Unlockables } from '../spells';
 
 @Component({
   selector: 'app-combat-page',
@@ -7,44 +13,101 @@ import { Router, RouterLink } from '@angular/router';
   styleUrls: ['./combat-page.component.scss'],
 })
 export class CombatPageComponent {
-  constructor(private router: Router) {}
+  constructor(
+    private router: Router,
+    public player: PlayerService,
+    private activatedRoute: ActivatedRoute,
+    private encounterTableService: EncounterTableService,
+    public unlocksService: UnlocksService
+  ) {
+    this.player.reset();
+    this.activatedRoute.queryParams.subscribe((queryParams) => {
+      const encounterNumber = queryParams['encounter'];
+      if (encounterNumber === undefined) {
+        this.gameState = 'error';
+        throw new Error('No Envounter Error');
+      }
+      this.monsters =
+        this.encounterTableService.encounterTable[encounterNumber];
+      this.gameState = 'fighting';
+    });
+  }
 
-  allMonstersDefeated = false;
+  gameState: GameState = 'loading';
+  selectedActon: 'attack' | 'spell' = 'attack';
+  selectedSpell?: Unlockables.Spell =
+    this.unlocksService.getUnlockedSpells()[0];
+  monsters: Monster[] = [];
+  combatLog: string[] = [];
+
+  attackAction(monsterIndex: number) {
+    const monster = this.monsters[monsterIndex];
+
+    if (this.selectedActon === 'attack') {
+      monster.hp = monster.hp - this.player.damage;
+      this.combatLog.push(
+        `You deal ${this.player.damage} damage to ${monster.name}`
+      );
+    }
+    if (this.selectedActon === 'spell' && this.selectedSpell) {
+      const log = this.selectedSpell.action(monster);
+      this.combatLog.push(log);
+    }
+
+    this.postActionPhase();
+  }
+
+  private postActionPhase() {
+    this.monsters.forEach((monster) => {
+      if (!monster.isDefeated()) {
+        const log = monster.takeAction();
+        this.combatLog.push(log);
+      }
+    });
+
+    if (this.player.hp <= 0) {
+      this.gameState = 'lost';
+    }
+
+    const allMonstersDefeated = this.monsters.reduce(
+      (isDefeated, monster) => isDefeated && monster.isDefeated(),
+      true
+    );
+
+    if (allMonstersDefeated) {
+      this.player.levelUp();
+      this.gameState = 'win';
+    }
+  }
+
+  attackBtn() {
+    this.selectedActon = 'attack';
+  }
+
+  spellBtn() {
+    this.selectedActon = 'spell';
+    // TODO: spell selection
+    this.gameState = 'selectingSpell';
+  }
 
   confirmRun() {
     const result = confirm('Do you wish to run?');
     if (result == true) {
-      this.router.navigateByUrl('');
+      this.router.navigateByUrl(Pages.Home);
     } else {
     }
   }
-  attack(monsterIndex: number) {
-    const monster = this.monsters[monsterIndex];
 
-    monster.monsterHp = monster.monsterHp - this.playerDamage;
-
-    if (monster.monsterHp <= 0) {
-      monster.monsterDefeated = true;
-    } else {
-      this.playerHp -= monster.damage;
-      if (this.playerHp <= 0) {
-        this.playerDefeated = true;
-      }
-    }
-
-    this.allMonstersDefeated = this.monsters.reduce(
-      (isDefeated, monster) => isDefeated && monster.monsterDefeated,
-      true
-    );
+  selectSpell(spell: Unlockables.Spell) {
+    this.selectedSpell = spell;
+    this.gameState = 'fighting';
   }
-  monsters = [
-    { type: 'imps', monsterHp: 8, monsterDefeated: false, damage: 5 },
-    { type: 'slime', monsterHp: 7, monsterDefeated: false, damage: 9 },
-    { type: 'skeleton', monsterHp: 14, monsterDefeated: false, damage: 15 },
-    { type: 'scorpion', monsterHp: 18, monsterDefeated: false, damage: 20 },
-    { type: 'dragon', monsterHp: 30, monsterDefeated: false, damage: 28 },
-  ];
-  playerDamage = 50987;
-  playerHp = 40;
-  playerDefeated = false;
 }
+
+type GameState =
+  | 'fighting'
+  | 'lost'
+  | 'win'
+  | 'loading'
+  | 'error'
+  | 'selectingSpell';

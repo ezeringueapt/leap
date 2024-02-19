@@ -1,8 +1,7 @@
 import { Component } from '@angular/core';
 import { UnlocksService } from '../unlocks.service';
-import { Router, RouterLink } from '@angular/router';
-import { HealComponent } from '../heal-page/heal-page.component';
-import { SpellButtonComponent } from '../spell-button/spell-button.component';
+import { Router } from '@angular/router';
+import { Unlockables } from '../spells';
 
 @Component({
   selector: 'app-home-page',
@@ -16,21 +15,21 @@ export class HomePageComponent {
     alert('Magic Missile does random damage to one target');
   }
   healButtonClicked() {
-    if (this.unlocksService.isHealUnlocked()) {
+    if (this.unlocksService.isUnlocked(Unlockables.Heal)) {
       alert('Heal restores a portion of your health.');
     } else {
       this.router.navigateByUrl('heal-page');
     }
   }
   galeButtonClicked() {
-    if (this.unlocksService.isGaleUnlocked()) {
+    if (this.unlocksService.isUnlocked(Unlockables.Gale)) {
       alert('Gale is a spell that damages multiple targets.');
     } else {
       this.router.navigateByUrl('gale-page');
     }
   }
   minimizeButtonClicked() {
-    if (this.unlocksService.isMinimizeUnlocked()) {
+    if (this.unlocksService.isUnlocked(Unlockables.Minimize)) {
       alert(
         'Minimize makes your target smaller causing them to take more damage.'
       );

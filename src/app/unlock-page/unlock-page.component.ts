@@ -1,7 +1,6 @@
 import { Component } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { UnlocksService, UNLOCK } from '../unlocks.service';
-import { isNgTemplate } from '@angular/compiler';
+import { UnlocksService } from '../unlocks.service';
 
 @Component({
   selector: 'app-unlock-page',
@@ -14,22 +13,11 @@ export class UnlockPageComponent {
     router: Router,
     unlocksService: UnlocksService
   ) {
-    const value: UNLOCK = route.snapshot.queryParams['thingtounlock'];
+    const value: string = route.snapshot.queryParams['thingtounlock'];
     if (value) {
-      unlocksService.unlock(value);
+      const unlock = unlocksService.unlock(value);
+      return router.navigateByUrl(unlock.placeToGoAfterUnlock);
     }
-    router.navigateByUrl(this.placeToGoToMap[value]);
+    router.navigateByUrl('/');
   }
-
-  placeToGoToMap = {
-    [UNLOCK.GALE]: 'gale-page',
-    [UNLOCK.MUSHROOM]: 'heal-page',
-    [UNLOCK.CHAMOMILE]: 'heal-page',
-    [UNLOCK.GINGERROOT]: 'heal-page',
-    [UNLOCK.LAVENDER]: 'heal-page',
-    [UNLOCK.BLUESTONE]: 'minimize-page',
-    [UNLOCK.EATINGPLANT]: 'minimize-page',
-    [UNLOCK.RAINBOWFISH]: 'minimize-page',
-    [UNLOCK.HEAL]: '',
-  };
 }

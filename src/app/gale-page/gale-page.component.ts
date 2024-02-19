@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
-import { UNLOCK, UnlocksService } from '../unlocks.service';
+import { UnlocksService } from '../unlocks.service';
+import { Unlockables } from '../spells';
 
 @Component({
   selector: 'app-gale-page',
@@ -10,6 +11,6 @@ export class GalePageComponent {
   constructor(public unlocksService: UnlocksService) {}
 
   isGaleUnlocked() {
-    return this.unlocksService.isUnlocked(UNLOCK.GALE);
+    return this.unlocksService.isUnlocked(Unlockables.Gale);
   }
 }

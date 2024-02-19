@@ -1,29 +1,73 @@
-<div *ngIf="!allMonstersDefeated && !playerDefeated">
-  <p>A group of monsters approach!</p>
+<div class="flex flex-col justify-items-center text-center">
+  <div
+    class="flex flex-col justify-items-center text-center px-5"
+    *ngIf="gameState === 'fighting'"
+  >
+    <p>A group of monsters approach!</p>
 
-  <p>{{ playerHp }} Player health</p>
+    <p>{{ player.hp }} Player health</p>
 
-  <div *ngFor="let monster of monsters; let i = index">
-    <div *ngIf="!monster.monsterDefeated">
-      <p>
-        Monster {{ i + 1 }} ({{ monster.type }}) health: {{ monster.monsterHp }}
-      </p>
+    <div *ngFor="let monster of monsters; let i = index">
+      <div *ngIf="!(monster.hp <= 0)">
+        <p>Monster {{ i + 1 }} ({{ monster.name }}) health: {{ monster.hp }}</p>
+        <button
+          (click)="attackAction(i)"
+          class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+        >
+          Attack Monster with
+          {{
+            selectedActon === "attack" ? "normal attack" : selectedSpell?.name
+          }}
+        </button>
+      </div>
+    </div>
+
+    <div class="grid grid-cols-2 grid-rows-2 grid-flow-col">
       <button
-        (click)="attack(i)"
-        class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+        class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 m-1 rounded"
+        (click)="attackBtn()"
       >
-        Attack Monster {{ i + 1 }}
+        Attack
+      </button>
+      <button
+        class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 m-1 rounded"
+        (click)="spellBtn()"
+      >
+        Spell
+      </button>
+      <button
+        class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 m-1 rounded"
+      >
+        ???
+      </button>
+      <button
+        class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 m-1 rounded"
+        (click)="confirmRun()"
+      >
+        Run
       </button>
     </div>
   </div>
-  <button>Spell</button>
-  <button>???</button>
-  <button (click)="confirmRun()">Run</button>
+
+  <div><p *ngIf="gameState === 'lost'">You Died!</p></div>
+  <div><p *ngIf="gameState === 'win'">You Win!</p></div>
+  <div><p *ngIf="gameState === 'loading'">Loading</p></div>
+  <div><p *ngIf="gameState === 'error'">An Error Occured</p></div>
+  <div>
+    <div *ngIf="gameState === 'selectingSpell'">
+      <div *ngFor="let spell of unlocksService.getUnlockedSpells()">
+        <button
+          class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 m-1 rounded"
+          (click)="selectSpell(spell)"
+        >
+          {{ spell.name }}
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <div class="border-gray-500 border-solid border-2 border-spacing-6">
+    Combat Log
+    <div *ngFor="let log of combatLog">{{ log }}</div>
+  </div>
 </div>
-
-<div><p *ngIf="allMonstersDefeated">Monster(s) defeated!</p></div>
-<div><p *ngIf="playerDefeated">Player defeated!</p></div>
-
-<p>
-  <u><button routerLink="">Back to Spellbook</button></u>
-</p>
