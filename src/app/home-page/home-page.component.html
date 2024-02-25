@@ -46,20 +46,10 @@
   </app-spell-button>
 </div>
 
-<div class="flex flex-row justify-center">
-  <button
-    class="text-white font-bold py-2 px-10 rounded container bg-gray-900 w-1/2 justify-center"
-    (click)="combatButtonClicked()"
-  >
-    Fight monsters
-  </button>
-</div>
+<app-spell-button bgColor="bg-gray-900" (click)="combatButtonClicked()">
+  Fight monsters
+</app-spell-button>
 
-<div class="flex flex-row justify-center">
-  <button
-    class="text-white font-bold py-2 px-10 rounded container bg-gray-900 w-1/2 justify-center"
-    (click)="demonlordConfirm()"
-  >
-    Fight Demonlord
-  </button>
-</div>
+<app-spell-button bgColor="bg-gray-900" (click)="demonlordConfirm()">
+  Fight Demonlord
+</app-spell-button>

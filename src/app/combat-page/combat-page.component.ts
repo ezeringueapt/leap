@@ -43,14 +43,12 @@ export class CombatPageComponent {
     const monster = this.monsters[monsterIndex];
 
     if (this.selectedActon === 'attack') {
-      monster.hp = monster.hp - this.player.damage;
-      this.combatLog.push(
-        `You deal ${this.player.damage} damage to ${monster.name}`
-      );
+      const dmgDealt = monster.takeDamage(this.player.damage);
+      this.combatLog.unshift(`You deal ${dmgDealt} damage to ${monster.name}`);
     }
     if (this.selectedActon === 'spell' && this.selectedSpell) {
-      const log = this.selectedSpell.action(monster, this.monsters);
-      this.combatLog.push(log);
+      const log = this.castSpell(monster, this.selectedSpell);
+      this.combatLog.unshift(log);
     }
 
     this.postActionPhase();
@@ -60,7 +58,7 @@ export class CombatPageComponent {
     this.monsters.forEach((monster) => {
       if (!monster.isDefeated()) {
         const log = monster.takeAction();
-        this.combatLog.push(log);
+        this.combatLog.unshift(log);
       }
     });
 
@@ -75,9 +73,19 @@ export class CombatPageComponent {
 
     if (allMonstersDefeated) {
       this.player.levelUp();
-      this.combatLog.push('You win and level up gaining 3 hp and 3 damage');
+      this.combatLog.unshift('You win and level up gaining 3 hp and 3 damage');
       this.gameState = 'win';
+      this.monsters.forEach((monster) => monster.reward());
     }
+  }
+
+  castSpell(monster: Monster, spell: Unlockables.Spell) {
+    if (this.player.mp < spell.mpCost) {
+      return `You try to cast ${spell.name}, but you dont have enough mp`;
+    }
+    this.player.mp -= spell.mpCost;
+
+    return spell.action(monster, this.monsters);
   }
 
   attackBtn() {
@@ -85,8 +93,6 @@ export class CombatPageComponent {
   }
 
   spellBtn() {
-    this.selectedActon = 'spell';
-    // TODO: spell selection
     this.gameState = 'selectingSpell';
   }
 
@@ -99,13 +105,14 @@ export class CombatPageComponent {
 
   selectSpell(spell: Unlockables.Spell) {
     if (spell.target === 'self' || spell.target === 'all') {
-      const log = spell.action(this.monsters[0], this.monsters);
-      this.combatLog.push(log);
+      const log = this.castSpell(this.monsters[0], spell);
+      this.combatLog.unshift(log);
       this.gameState = 'fighting';
       this.postActionPhase();
       return;
     }
     this.selectedSpell = spell;
+    this.selectedActon = 'spell';
     this.gameState = 'fighting';
   }
 
