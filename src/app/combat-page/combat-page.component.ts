@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { PlayerService } from './player.service';
 import { Monster } from './monsters';
-import { EncounterTableService } from './encounter-table';
+import { EncounterTableService } from './encounter-table.service';
 import { Pages } from '../app-routing.module';
 import { UnlocksService } from '../unlocks.service';
 import { Unlockables } from '../spells';
@@ -27,8 +27,7 @@ export class CombatPageComponent {
         this.gameState = 'error';
         throw new Error('No Envounter Error');
       }
-      this.monsters =
-        this.encounterTableService.encounterTable[encounterNumber];
+      this.monsters = this.encounterTableService.getEncounter(+encounterNumber);
       this.gameState = 'fighting';
     });
   }
@@ -50,7 +49,7 @@ export class CombatPageComponent {
       );
     }
     if (this.selectedActon === 'spell' && this.selectedSpell) {
-      const log = this.selectedSpell.action(monster);
+      const log = this.selectedSpell.action(monster, this.monsters);
       this.combatLog.push(log);
     }
 
@@ -76,6 +75,7 @@ export class CombatPageComponent {
 
     if (allMonstersDefeated) {
       this.player.levelUp();
+      this.combatLog.push('You win and level up gaining 3 hp and 3 damage');
       this.gameState = 'win';
     }
   }
@@ -94,13 +94,23 @@ export class CombatPageComponent {
     const result = confirm('Do you wish to run?');
     if (result == true) {
       this.router.navigateByUrl(Pages.Home);
-    } else {
     }
   }
 
   selectSpell(spell: Unlockables.Spell) {
+    if (spell.target === 'self' || spell.target === 'all') {
+      const log = spell.action(this.monsters[0], this.monsters);
+      this.combatLog.push(log);
+      this.gameState = 'fighting';
+      this.postActionPhase();
+      return;
+    }
     this.selectedSpell = spell;
     this.gameState = 'fighting';
+  }
+
+  returnHome() {
+    this.router.navigateByUrl('');
   }
 }
 

@@ -1,25 +1,27 @@
 import { Injectable } from '@angular/core';
 import { Unlockables } from './spells';
+import { PlayerService } from './combat-page/player.service';
 
 const LOCAL_STORAGE_KEY = 'cookie';
 @Injectable({
   providedIn: 'root',
 })
 export class UnlocksService {
+  constructor(private playerService: PlayerService) {}
   private unlockedStuff: Record<string, boolean> = JSON.parse(
-    localStorage.getItem(LOCAL_STORAGE_KEY) || '{}'
+    localStorage.getItem(LOCAL_STORAGE_KEY) || '{ "MagicMissle" : true}'
   );
 
   private unlockedClasses = Object.fromEntries(
     Object.entries(this.unlockedStuff).map(([className]) => [
       className,
-      spellNameToSpellClass(className),
+      this.spellNameToSpellClass(className),
     ])
   );
 
   unlock(key: string) {
     this.unlockedStuff[key] = true;
-    this.unlockedClasses[key] = spellNameToSpellClass(key);
+    this.unlockedClasses[key] = this.spellNameToSpellClass(key);
     localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(this.unlockedStuff));
     return this.unlockedClasses[key];
   }
@@ -41,10 +43,10 @@ export class UnlocksService {
       isSpell(unlockable)
     ) as Unlockables.Spell[];
   }
-}
 
-function spellNameToSpellClass(spellName: string): Unlockables.Unlockable {
-  return new (<any>Unlockables)[spellName]();
+  private spellNameToSpellClass(spellName: string): Unlockables.Unlockable {
+    return new (<any>Unlockables)[spellName](this, this.playerService);
+  }
 }
 
 function isSpell(

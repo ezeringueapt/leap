@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { UnlocksService } from '../unlocks.service';
 import { Router } from '@angular/router';
 import { Unlockables } from '../spells';
+import { PlayerService } from '../combat-page/player.service';
 
 @Component({
   selector: 'app-home-page',
@@ -9,7 +10,11 @@ import { Unlockables } from '../spells';
   styleUrls: ['./home-page.component.scss'],
 })
 export class HomePageComponent {
-  constructor(public unlocksService: UnlocksService, private router: Router) {}
+  constructor(
+    public unlocksService: UnlocksService,
+    private router: Router,
+    private playerService: PlayerService
+  ) {}
 
   magicMissileConfirm() {
     alert('Magic Missile does random damage to one target');
@@ -38,17 +43,27 @@ export class HomePageComponent {
     }
   }
   fireballConfirm() {
-    confirm('You need to defeat a powerful foe for this spell. Are you ready?');
-  }
-  icebeamConfirm() {
-    confirm('You need to defeat a powerful foe for this spell. Are you ready?');
+    const confirmed = confirm(
+      'You need to defeat a powerful foe for this spell. Are you ready?'
+    );
+    if (confirmed) {
+      this.router.navigateByUrl('combat-page?encounter=99');
+    }
   }
   demonlordConfirm() {
-    confirm(
-      'You can only fight the Demonlord when you have 6 spells unlocked!'
-    );
+    alert('You can only fight the Demonlord when you have 6 spells unlocked!');
   }
   combatButtonClicked() {
-    this.router.navigateByUrl('combat-page');
+    const unlockedSpellsCount = this.unlocksService.getUnlockedSpells().length;
+    const playerLevel = this.playerService.level;
+    if (playerLevel > unlockedSpellsCount * 2) {
+      alert(
+        `Your level (${playerLevel}) is 2x your number of spells (${unlockedSpellsCount}), Learn more spells to level up`
+      );
+      return;
+    }
+    this.router.navigateByUrl(
+      `combat-page?encounter=${this.unlocksService.getUnlockedSpells().length}`
+    );
   }
 }
