@@ -42,7 +42,39 @@ export class HomePageComponent {
       this.router.navigateByUrl('minimize-page');
     }
   }
+
+  stoneDefenseConfirm() {
+    if (this.unlocksService.isUnlocked(Unlockables.StoneDefence)) {
+      return alert('Stone Defence makes you take less damage');
+    }
+    const confirmed = confirm(
+      'You need to defeat a powerful foe for this spell. Are you ready?'
+    );
+    if (confirmed) {
+      this.router.navigateByUrl('combat-page?encounter=89');
+    }
+  }
+
+  chargeAttackConfirm() {
+    if (this.unlocksService.isUnlocked(Unlockables.ChargeAttack)) {
+      return alert(
+        'Charge Attack takes an extra turn, but deals massive damage'
+      );
+    }
+    const confirmed = confirm(
+      'You need to defeat a powerful foe for this spell. Are you ready?'
+    );
+    if (confirmed) {
+      this.router.navigateByUrl('combat-page?encounter=404');
+    }
+  }
+
   fireballConfirm() {
+    if (this.unlocksService.isUnlocked(Unlockables.Fireball)) {
+      return alert(
+        'Fireball does damage to one foe. Icebeam does damage to all foes.'
+      );
+    }
     const confirmed = confirm(
       'You need to defeat a powerful foe for this spell. Are you ready?'
     );
@@ -50,8 +82,32 @@ export class HomePageComponent {
       this.router.navigateByUrl('combat-page?encounter=99');
     }
   }
+
+  blindingLightConfirm() {
+    if (this.unlocksService.isUnlocked(Unlockables.BlindingLight)) {
+      return alert(
+        'Blinding Light blinds all enemies causing them to sometimes miss.'
+      );
+    }
+    const confirmed = confirm(
+      'You need to defeat a powerful foe for this spell. Are you ready?'
+    );
+    if (confirmed) {
+      this.router.navigateByUrl('combat-page?encounter=100');
+    }
+  }
+
   demonlordConfirm() {
-    alert('You can only fight the Demonlord when you have 6 spells unlocked!');
+    const spellsUnlocked = this.unlocksService.getUnlockedSpells().length;
+    if (spellsUnlocked <= 6) {
+      return alert(
+        'You can only fight the Demonlord when you have 6 spells unlocked!'
+      );
+    }
+    const confirmed = confirm('Are you ready to fight the demonlord?');
+    if (confirmed) {
+      this.router.navigateByUrl('combat-page?encounter=999');
+    }
   }
   combatButtonClicked() {
     const unlockedSpellsCount = this.unlocksService.getUnlockedSpells().length;

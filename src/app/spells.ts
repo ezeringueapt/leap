@@ -1,4 +1,5 @@
 import { Pages } from './app-routing.module';
+import { CombatLogService } from './combat-page/combat-log.service';
 import { Monster } from './combat-page/monsters';
 import { PlayerService } from './combat-page/player.service';
 import { UnlocksService } from './unlocks.service';
@@ -8,7 +9,8 @@ export namespace Unlockables {
   export abstract class Unlockable {
     constructor(
       protected unlocksService: UnlocksService,
-      protected playerService: PlayerService
+      protected playerService: PlayerService,
+      protected combatLogService: CombatLogService
     ) {}
     name = this.constructor.name;
     abstract placeToGoAfterUnlock: Pages;
@@ -88,6 +90,21 @@ export namespace Unlockables {
     };
   }
 
+  export class ChargeAttack extends Spell {
+    placeToGoAfterUnlock = Pages.Home;
+    target: TargetingType = 'single';
+    mpCost = 0;
+    action = (monster: Monster) => {
+      if (this.playerService.statuses.includes('charged')) {
+        this.playerService.removeStatus('charged');
+        const dmgDealt = monster.takeDamage(50);
+        return `You deal ${dmgDealt} damage to ${monster.name} with a charged attack`;
+      }
+      this.playerService.giveStatus('charged');
+      return `You charge up a huge attack`;
+    };
+  }
+
   export class Heal extends Spell {
     placeToGoAfterUnlock = Pages.Home;
     target: TargetingType = 'self';
@@ -121,6 +138,25 @@ export namespace Unlockables {
       monsters.forEach((monster) => monster.takeDamage(20));
 
       return `Icebeam does 20 ice damage to all enemies`;
+    };
+  }
+
+  export class BlindingLight extends Spell {
+    target: TargetingType = 'all';
+    placeToGoAfterUnlock = Pages.Home;
+    mpCost = 8;
+    action = (_: Monster, monsters: Monster[]) => {
+      monsters.forEach((monster) => {
+        if (monster.name === 'Demon Lord') {
+          monster.hp = 100;
+          this.combatLogService.addLine(
+            'The Demon Lord is weakend by the light'
+          );
+        }
+      });
+      monsters.forEach((monster) => monster.giveStatus('blinded'));
+
+      return `All the enemies become blinded`;
     };
   }
 }

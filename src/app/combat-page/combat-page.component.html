@@ -62,7 +62,7 @@
 
   <div><p *ngIf="gameState === 'loading'">Loading</p></div>
   <div>
-    <div *ngIf="gameState === 'selectingSpell'">
+    <div *ngIf="gameState === 'selectingSpell'" class="my-2">
       <div *ngFor="let spell of unlocksService.getUnlockedSpells()">
         <app-spell-button bgColor="bg-blue-500" (click)="selectSpell(spell)">
           {{ spell.name }}
@@ -73,6 +73,6 @@
 
   <div class="border-gray-500 border-solid border-2 border-spacing-6">
     Combat Log
-    <div *ngFor="let log of combatLog">{{ log }}</div>
+    <div *ngFor="let log of combatLogService.combatLog">{{ log }}</div>
   </div>
 </div>

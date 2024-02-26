@@ -1,13 +1,17 @@
 import { Injectable } from '@angular/core';
 import { Unlockables } from './spells';
 import { PlayerService } from './combat-page/player.service';
+import { CombatLogService } from './combat-page/combat-log.service';
 
 const LOCAL_STORAGE_KEY = 'cookie';
 @Injectable({
   providedIn: 'root',
 })
 export class UnlocksService {
-  constructor(private playerService: PlayerService) {}
+  constructor(
+    private playerService: PlayerService,
+    private combatLogService: CombatLogService
+  ) {}
   private unlockedStuff: Record<string, boolean> = JSON.parse(
     localStorage.getItem(LOCAL_STORAGE_KEY) || '{ "MagicMissle" : true}'
   );
@@ -45,7 +49,11 @@ export class UnlocksService {
   }
 
   private spellNameToSpellClass(spellName: string): Unlockables.Unlockable {
-    return new (<any>Unlockables)[spellName](this, this.playerService);
+    return new (<any>Unlockables)[spellName](
+      this,
+      this.playerService,
+      this.combatLogService
+    );
   }
 }
 

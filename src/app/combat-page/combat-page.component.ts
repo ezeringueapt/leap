@@ -6,6 +6,7 @@ import { EncounterTableService } from './encounter-table.service';
 import { Pages } from '../app-routing.module';
 import { UnlocksService } from '../unlocks.service';
 import { Unlockables } from '../spells';
+import { CombatLogService } from './combat-log.service';
 
 @Component({
   selector: 'app-combat-page',
@@ -18,8 +19,10 @@ export class CombatPageComponent {
     public player: PlayerService,
     private activatedRoute: ActivatedRoute,
     private encounterTableService: EncounterTableService,
-    public unlocksService: UnlocksService
+    public unlocksService: UnlocksService,
+    public combatLogService: CombatLogService
   ) {
+    this.combatLogService.clear();
     this.player.reset();
     this.activatedRoute.queryParams.subscribe((queryParams) => {
       const encounterNumber = queryParams['encounter'];
@@ -37,18 +40,19 @@ export class CombatPageComponent {
   selectedSpell?: Unlockables.Spell =
     this.unlocksService.getUnlockedSpells()[0];
   monsters: Monster[] = [];
-  combatLog: string[] = [];
 
   attackAction(monsterIndex: number) {
     const monster = this.monsters[monsterIndex];
 
     if (this.selectedActon === 'attack') {
       const dmgDealt = monster.takeDamage(this.player.damage);
-      this.combatLog.unshift(`You deal ${dmgDealt} damage to ${monster.name}`);
+      this.combatLogService.addLine(
+        `You deal ${dmgDealt} damage to ${monster.name}`
+      );
     }
     if (this.selectedActon === 'spell' && this.selectedSpell) {
       const log = this.castSpell(monster, this.selectedSpell);
-      this.combatLog.unshift(log);
+      this.combatLogService.addLine(log);
     }
 
     this.postActionPhase();
@@ -58,7 +62,7 @@ export class CombatPageComponent {
     this.monsters.forEach((monster) => {
       if (!monster.isDefeated()) {
         const log = monster.takeAction();
-        this.combatLog.unshift(log);
+        this.combatLogService.addLine(log);
       }
     });
 
@@ -73,7 +77,9 @@ export class CombatPageComponent {
 
     if (allMonstersDefeated) {
       this.player.levelUp();
-      this.combatLog.unshift('You win and level up gaining 3 hp and 3 damage');
+      this.combatLogService.addLine(
+        'You win and level up gaining 3 hp and 3 damage'
+      );
       this.gameState = 'win';
       this.monsters.forEach((monster) => monster.reward());
     }
@@ -106,7 +112,7 @@ export class CombatPageComponent {
   selectSpell(spell: Unlockables.Spell) {
     if (spell.target === 'self' || spell.target === 'all') {
       const log = this.castSpell(this.monsters[0], spell);
-      this.combatLog.unshift(log);
+      this.combatLogService.addLine(log);
       this.gameState = 'fighting';
       this.postActionPhase();
       return;

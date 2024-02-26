@@ -1,15 +1,19 @@
-<h1>Gale</h1>
-<p>
-  Many spells are good for fighting one target. But you need something that can
-  hit many creatures at once. Try looking for a wind sprite that can teach you
-  Gale! Wind sprites tend to like things that move around a lot.
-</p>
+<div class="flex flex-col text-center align-middle justify-center mx-2">
+  <h1 class="text-3xl">Gale</h1>
+  <p>
+    Many spells are good for fighting one target. But you need something that
+    can hit many creatures at once. Try looking for a wind sprite that can teach
+    you Gale! Wind sprites tend to like things that move around a lot.
+  </p>
 
-<img
-  *ngIf="!isGaleUnlocked()"
-  src="assets/questionBlock.png"
-  alt="Question Mark"
-  style="width: 150px; height: 150px"
-/>
+  <img
+    *ngIf="!isGaleUnlocked()"
+    src="assets/questionBlock.png"
+    alt="Question Mark"
+    class="my-4"
+  />
 
-<p><button routerLink="">Back to Spellbook</button></p>
+  <app-spell-button bgColor="bg-gray-900" routerLink=""
+    >Back to Spellbook</app-spell-button
+  >
+</div>

@@ -2,7 +2,7 @@ import { Unlockables } from '../spells';
 import { UnlocksService } from '../unlocks.service';
 import { PlayerService } from './player.service';
 
-type MonsterStatuses = 'minimized';
+type MonsterStatuses = 'minimized' | 'blinded';
 
 export abstract class Monster {
   constructor(
@@ -39,7 +39,7 @@ export class Imp extends Monster {
   hp = 8;
 
   takeAction = () => {
-    const damageTaken = this.playerService.takeDamage(5);
+    const damageTaken = this.playerService.takeDamage(5, this);
     return `${this.name} attacks you for ${damageTaken} damage`;
   };
   reward = () => {};
@@ -49,7 +49,7 @@ export class Slime extends Monster {
   name = 'Slime';
   hp = 7;
   takeAction = () => {
-    const damageTaken = this.playerService.takeDamage(9);
+    const damageTaken = this.playerService.takeDamage(9, this);
     return `${this.name} attacks you for ${damageTaken} damage`;
   };
   reward = () => {};
@@ -59,7 +59,7 @@ export class Skeleton extends Monster {
   name = 'Skeleton';
   hp = 14;
   takeAction = () => {
-    const damageTaken = this.playerService.takeDamage(15);
+    const damageTaken = this.playerService.takeDamage(15, this);
     return `${this.name} attacks you for ${damageTaken} damage`;
   };
   reward = () => {};
@@ -69,7 +69,7 @@ export class Scorpion extends Monster {
   name = 'Scorpion';
   hp = 18;
   takeAction = () => {
-    const damageTaken = this.playerService.takeDamage(20);
+    const damageTaken = this.playerService.takeDamage(20, this);
     return `${this.name} attacks you for ${damageTaken} damage`;
   };
   reward = () => {};
@@ -79,7 +79,7 @@ export class Dragon extends Monster {
   name = 'Dragon';
   hp = 30;
   takeAction = () => {
-    const damageTaken = this.playerService.takeDamage(28);
+    const damageTaken = this.playerService.takeDamage(28, this);
     return `${this.name} attacks you for ${damageTaken} damage`;
   };
   reward = () => {};
@@ -89,7 +89,7 @@ export class Golem extends Monster {
   name = 'Golem';
   hp = 70;
   takeAction = () => {
-    const damageTaken = this.playerService.takeDamage(35);
+    const damageTaken = this.playerService.takeDamage(35, this);
     return `${this.name} attacks you for ${damageTaken} damage`;
   };
   reward = () => {
@@ -102,7 +102,7 @@ export class FireWitch extends Monster {
   hp = 30;
 
   takeAction = () => {
-    const damageTaken = this.playerService.takeDamage(18);
+    const damageTaken = this.playerService.takeDamage(18, this);
     return `${this.name} throws a fireball at you for ${damageTaken} damage`;
   };
   reward = () => {
@@ -116,10 +116,29 @@ export class IceWitch extends Monster {
   hp = 30;
 
   takeAction = () => {
-    const damageTaken = this.playerService.takeDamage(18);
+    const damageTaken = this.playerService.takeDamage(18, this);
     return `${this.name} shoots an icebeam at you for ${damageTaken} damage`;
   };
   reward = () => {};
+}
+
+export class King extends Monster {
+  name = 'King';
+  hp = 40;
+  charged = false;
+
+  takeAction = () => {
+    if (this.charged) {
+      const damageTaken = this.playerService.takeDamage(43, this);
+      this.charged = false;
+      return `${this.name} swings at you for ${damageTaken} damage`;
+    }
+    this.charged = true;
+    return `${this.name} charges up a massive attack`;
+  };
+  reward = () => {
+    this.unlocksService.unlock(Unlockables.BlindingLight.name);
+  };
 }
 
 export class Queen extends Monster {
@@ -127,10 +146,12 @@ export class Queen extends Monster {
   hp = 40;
 
   takeAction = () => {
-    const damageTaken = this.playerService.takeDamage(26);
+    const damageTaken = this.playerService.takeDamage(26, this);
     return `${this.name} shoots an icebeam at you for ${damageTaken} damage`;
   };
-  reward = () => {};
+  reward = () => {
+    this.unlocksService.unlock(Unlockables.BlindingLight.name);
+  };
 }
 
 export class DemonLord extends Monster {
@@ -138,8 +159,10 @@ export class DemonLord extends Monster {
   hp = 1000;
 
   takeAction = () => {
-    const damageTaken = this.playerService.takeDamage(32);
+    const damageTaken = this.playerService.takeDamage(32, this);
     return `${this.name} shoots an icebeam at you for ${damageTaken} damage`;
   };
-  reward = () => {};
+  reward = () => {
+    alert('you defeated the demon lord congratz');
+  };
 }

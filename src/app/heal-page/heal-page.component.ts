@@ -27,6 +27,11 @@ export class HealComponent {
   }
 
   shouldChangeLayout() {
-    return this.unlocksService.isUnlocked(Unlockables.Heal);
+    return (
+      this.isChamomileUnlocked() &&
+      this.isGingerRootUnlocked() &&
+      this.isLavenderUnlocked() &&
+      this.isMushroomUnlocked()
+    );
   }
 }

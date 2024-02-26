@@ -19,11 +19,11 @@
     >Minimize</app-spell-button
   >
 
-  <app-spell-button routerLink="stone-defense-page" bgColor="bg-amber-900">
+  <app-spell-button bgColor="bg-amber-900" (click)="stoneDefenseConfirm()">
     Stone Defense
   </app-spell-button>
 
-  <app-spell-button routerLink="charge-attack-page" bgColor="bg-indigo-800">
+  <app-spell-button (click)="chargeAttackConfirm()" bgColor="bg-indigo-800">
     Charge Attack
   </app-spell-button>
 
@@ -41,7 +41,7 @@
     >Icebeam</app-spell-button
   >
 
-  <app-spell-button class="btn btn-primary" bgColor="bg-yellow-400">
+  <app-spell-button (click)="blindingLightConfirm()" bgColor="bg-yellow-400">
     Blinding Light
   </app-spell-button>
 </div>

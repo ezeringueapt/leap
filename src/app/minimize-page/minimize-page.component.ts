@@ -20,4 +20,12 @@ export class MinimizePageComponent {
   isRainbowFishUnlocked() {
     return this.unlocksService.isUnlocked(Unlockables.RainbowFish);
   }
+
+  shouldChangeLayout() {
+    return (
+      this.isBlueStoneUnlocked() &&
+      this.isEatingPlantUnlocked() &&
+      this.isRainbowFishUnlocked()
+    );
+  }
 }

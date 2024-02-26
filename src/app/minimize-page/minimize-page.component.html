@@ -1,44 +1,64 @@
-<h1>Minimize</h1>
-<p>
-  Some of your enemies are pretty tough. The pixies know a spell or two to help
-  you out.
-</p>
+<div class="flex flex-col text-center align-middle justify-center mx-2">
+  <h1 class="text-3xl">Minimize</h1>
+  <p>
+    Some of your enemies are pretty tough. The pixies know a spell or two to
+    help you out.
+  </p>
 
-<p>
-  You arrive at Pixie Grotto, and a small group approaches you. After explaining
-  your request, they're hapy to help. If you can do something for them.
-</p>
+  <p>
+    You arrive at Pixie Grotto, and a small group approaches you. After
+    explaining your request, they're hapy to help. If you can do something for
+    them.
+  </p>
 
-<p>
-  "Solve our three riddles, and we'll teach you the spell Minimize! It can make
-  your opponents much smaller which means it'll hurt more when you hit them. Be
-  careful, if they're small they might be harder to hit too, and the spell won't
-  last forever!
-</p>
+  <p>
+    "Solve our three riddles, and we'll teach you the spell Minimize! It can
+    make your opponents much smaller which means it'll hurt more when you hit
+    them. Be careful, if they're small they might be harder to hit too, and the
+    spell won't last forever!
+  </p>
 
-<p>"Bring us these items, and we'll help you on your way."</p>
+  <p>"Bring us these items, and we'll help you on your way."</p>
 
-<p>The ocean in solid form.</p>
-<p>A plant that preys on others.</p>
-<p>The fish that gives it scales away.</p>
+  <p>The ocean in solid form.</p>
+  <p>A plant that preys on others.</p>
+  <p>The fish that gives it scales away.</p>
 
-<img
-  *ngIf="!isBlueStoneUnlocked()"
-  src="assets/questionBlock.png"
-  alt="Question Mark"
-  style="width: 150px; height: 150px"
-/>
-<img
-  *ngIf="!isEatingPlantUnlocked()"
-  src="assets/questionBlock.png"
-  alt="Question Mark"
-  style="width: 150px; height: 150px"
-/>
-<img
-  *ngIf="!isRainbowFishUnlocked()"
-  src="assets/questionBlock.png"
-  alt="Question Mark"
-  style="width: 150px; height: 150px"
-/>
+  <div class="flex flex-row w-full flex-wrap justify-center">
+    <img
+      *ngIf="!isBlueStoneUnlocked()"
+      src="assets/questionBlock.png"
+      alt="Question Mark"
+      style="width: 150px; height: 150px"
+    />
+    <img
+      *ngIf="!isEatingPlantUnlocked()"
+      src="assets/questionBlock.png"
+      alt="Question Mark"
+      style="width: 150px; height: 150px"
+    />
+    <img
+      *ngIf="!isRainbowFishUnlocked()"
+      src="assets/questionBlock.png"
+      alt="Question Mark"
+      style="width: 150px; height: 150px"
+    />
+  </div>
 
-<p><button routerLink="">Back to Spellbook</button></p>
+  <div *ngIf="shouldChangeLayout()">
+    <p>Wowie you did it</p>
+    <p>
+      <app-spell-button
+        bgColor="bg-gray-900"
+        routerLink="/unlock-page"
+        [queryParams]="{ thingtounlock: 'Minimize' }"
+      >
+        Unlock the heal spell
+      </app-spell-button>
+    </p>
+  </div>
+
+  <app-spell-button class="my-2" bgColor="bg-gray-900" routerLink=""
+    >Back to Spellbook</app-spell-button
+  >
+</div>
