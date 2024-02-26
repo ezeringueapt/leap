@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { FireWitch, IceWitch, Imp, Monster } from './monsters';
+import { FireWitch, IceWitch, Imp, Monster, Skeleton, Slime } from './monsters';
 import { PlayerService } from './player.service';
 import { UnlocksService } from '../unlocks.service';
 
@@ -15,18 +15,11 @@ export class EncounterTableService {
   getEncounter(encounterNumber: number) {
     switch (encounterNumber) {
       case 1:
-        return [new Imp(this.playerService, this.unlocksService)];
+        return [this.imp(), this.imp()];
       case 2:
-        return [
-          new Imp(this.playerService, this.unlocksService),
-          new Imp(this.playerService, this.unlocksService),
-        ];
+        return [this.slime(), this.slime()];
       case 3:
-        return [
-          new Imp(this.playerService, this.unlocksService),
-          new Imp(this.playerService, this.unlocksService),
-          new Imp(this.playerService, this.unlocksService),
-        ];
+        return [this.skeleton(), this.skeleton()];
       case 99:
         return [
           new FireWitch(this.playerService, this.unlocksService),
@@ -34,5 +27,17 @@ export class EncounterTableService {
         ];
     }
     throw new Error('No Encounter Found for that number');
+  }
+
+  imp() {
+    return new Imp(this.playerService, this.unlocksService);
+  }
+
+  slime() {
+    return new Slime(this.playerService, this.unlocksService);
+  }
+
+  skeleton() {
+    return new Skeleton(this.playerService, this.unlocksService);
   }
 }
