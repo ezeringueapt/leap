@@ -137,7 +137,7 @@ export class King extends Monster {
     return `${this.name} charges up a massive attack`;
   };
   reward = () => {
-    this.unlocksService.unlock(Unlockables.BlindingLight.name);
+    this.unlocksService.unlock(Unlockables.ChargeAttack.name);
   };
 }
 
@@ -160,7 +160,7 @@ export class DemonLord extends Monster {
 
   takeAction = () => {
     const damageTaken = this.playerService.takeDamage(32, this);
-    return `${this.name} shoots an icebeam at you for ${damageTaken} damage`;
+    return `${this.name} fires a dark beam at you for ${damageTaken} damage`;
   };
   reward = () => {
     alert('you defeated the demon lord congratz');

@@ -97,7 +97,9 @@ export namespace Unlockables {
     action = (monster: Monster) => {
       if (this.playerService.statuses.includes('charged')) {
         this.playerService.removeStatus('charged');
-        const dmgDealt = monster.takeDamage(50);
+        const dmgDealt = monster.takeDamage(
+          Math.round(this.playerService.damage * 2.5)
+        );
         return `You deal ${dmgDealt} damage to ${monster.name} with a charged attack`;
       }
       this.playerService.giveStatus('charged');

@@ -12,7 +12,7 @@ export class PlayerService {
   constructor(private combatLogService: CombatLogService) {}
   level = +(localStorage.getItem('playerLevel') || '1');
   damage = this.level * 3 + 2;
-  maxHp = this.level * 3 + 37;
+  maxHp = this.level * 3 + 47;
   maxMp = this.level * 3 + 12;
   hp = this.maxHp;
   mp = this.maxMp;
@@ -30,6 +30,7 @@ export class PlayerService {
 
     this.maxHp += 3;
     this.damage += 3;
+    this.maxMp += 3;
   }
 
   takeDamage(ammountOfDamage: number, attackingMonster: Monster) {
@@ -43,7 +44,7 @@ export class PlayerService {
       this.combatLogService.addLine(
         `${attackingMonster.name} misses because its blinded`
       );
-      return;
+      return 0;
     }
     this.hp -= ammountOfDamage;
     return ammountOfDamage;
