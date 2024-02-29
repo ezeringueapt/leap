@@ -1,23 +1,37 @@
-<div class="flex flex-col justify-items-center text-center">
+<div
+  class="flex flex-col justify-items-center text-center bg-black text-white h-full justify-stretch"
+>
   <div
     class="flex flex-col justify-items-center text-center px-5"
     *ngIf="gameState === 'fighting'"
   >
-    <p>A group of monsters approach!</p>
-
-    <p>Lv: {{ player.level }}</p>
+    <p>Your Level: {{ player.level }}</p>
     <p>{{ player.hp }} / {{ player.maxHp }} Player health</p>
+    <app-progress-bar [percent]="(player.hp / player.maxHp) * 100" />
     <p>{{ player.mp }} / {{ player.maxMp }} Player mp</p>
-
-    <div *ngFor="let monster of monsters; let i = index">
-      <div *ngIf="!(monster.hp <= 0)">
-        <p>Monster {{ i + 1 }} ({{ monster.name }}) health: {{ monster.hp }}</p>
-        <app-spell-button (click)="attackAction(i)" bgColor="bg-blue-500">
-          Attack Monster with
-          {{
-            selectedActon === "attack" ? "normal attack" : selectedSpell?.name
-          }}
-        </app-spell-button>
+    <app-progress-bar
+      [percent]="(player.mp / player.maxMp) * 100"
+      barColor="bg-blue-500"
+    />
+    <p>Selected Spell: {{ selectedSpell?.name }}</p>
+    <div class="flex flex-row justify-center">
+      <div
+        class="flex flex-col"
+        *ngFor="let monster of monsters; let i = index"
+      >
+        <div class="flex flex-col items-center" *ngIf="!(monster.hp <= 0)">
+          <img
+            [src]="'assets/sprites/' + monster.name + '.png'"
+            alt="monster image"
+            style="height: 100px; width: 100px"
+            class="mb-1 flex"
+          />
+          <app-spell-button (click)="attackAction(i)" bgColor="bg-blue-500">
+            <div class="font-normal text-sm">
+              {{ selectedActon === "attack" ? "Attack" : "Cast" }}
+            </div>
+          </app-spell-button>
+        </div>
       </div>
     </div>
 
@@ -71,8 +85,10 @@
     </div>
   </div>
 
-  <div class="border-gray-500 border-solid border-2 border-spacing-6">
-    Combat Log
+  Combat Log
+  <div
+    class="border-gray-500 border-solid border-t-2 border-spacing-6 overflow-scroll"
+  >
     <div *ngFor="let log of combatLogService.combatLog">{{ log }}</div>
   </div>
 </div>

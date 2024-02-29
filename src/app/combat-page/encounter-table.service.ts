@@ -2,9 +2,9 @@ import { Injectable } from '@angular/core';
 import {
   DemonLord,
   Dragon,
-  FireWitch,
+  Firebird,
   Golem,
-  IceWitch,
+  Icebird,
   Imp,
   King,
   Monster,
@@ -48,19 +48,16 @@ export class EncounterTableService {
         ];
       case 3:
         return [
-          [this.imp(), this.imp(), this.imp()],
-          [this.slime(), this.slime(), this.slime()],
+          [this.slime(), this.slime()],
           [this.skeleton(), this.skeleton()],
         ];
       case 4:
         return [
-          [this.imp(), this.imp(), this.imp()],
           [this.slime(), this.slime(), this.slime()],
           [this.skeleton(), this.skeleton(), this.skeleton()],
         ];
       case 5:
         return [
-          [this.imp(), this.imp(), this.imp()],
           [this.slime(), this.slime(), this.slime()],
           [this.skeleton(), this.skeleton(), this.skeleton()],
           [this.scorpion()],
@@ -98,8 +95,8 @@ export class EncounterTableService {
       case 99:
         return [
           [
-            new FireWitch(this.playerService, this.unlocksService),
-            new IceWitch(this.playerService, this.unlocksService),
+            new Firebird(this.playerService, this.unlocksService),
+            new Icebird(this.playerService, this.unlocksService),
           ],
         ];
       case 100:

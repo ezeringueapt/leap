@@ -97,8 +97,8 @@ export class Golem extends Monster {
   };
 }
 
-export class FireWitch extends Monster {
-  name = 'Fire Witch';
+export class Firebird extends Monster {
+  name = 'Firebird';
   hp = 30;
 
   takeAction = () => {
@@ -111,8 +111,8 @@ export class FireWitch extends Monster {
   };
 }
 
-export class IceWitch extends Monster {
-  name = 'Ice Witch';
+export class Icebird extends Monster {
+  name = 'Icebird';
   hp = 30;
 
   takeAction = () => {

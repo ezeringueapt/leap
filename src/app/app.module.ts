@@ -11,6 +11,7 @@ import { SpellButtonComponent } from './spell-button/spell-button.component';
 import { GalePageComponent } from './gale-page/gale-page.component';
 import { MinimizePageComponent } from './minimize-page/minimize-page.component';
 import { CombatPageComponent } from './combat-page/combat-page.component';
+import { ProgressBarComponent } from './progress-bar/progress-bar.component';
 
 @NgModule({
   declarations: [
@@ -23,6 +24,7 @@ import { CombatPageComponent } from './combat-page/combat-page.component';
     GalePageComponent,
     MinimizePageComponent,
     CombatPageComponent,
+    ProgressBarComponent,
   ],
   imports: [BrowserModule, AppRoutingModule],
   providers: [],

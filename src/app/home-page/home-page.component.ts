@@ -19,6 +19,7 @@ export class HomePageComponent {
   magicMissileConfirm() {
     alert('Magic Missile does random damage to one target');
   }
+
   healButtonClicked() {
     if (this.unlocksService.isUnlocked(Unlockables.Heal)) {
       alert('Heal restores a portion of your health.');
@@ -26,6 +27,7 @@ export class HomePageComponent {
       this.router.navigateByUrl('heal-page');
     }
   }
+
   galeButtonClicked() {
     if (this.unlocksService.isUnlocked(Unlockables.Gale)) {
       alert('Gale is a spell that damages multiple targets.');
@@ -33,6 +35,7 @@ export class HomePageComponent {
       this.router.navigateByUrl('gale-page');
     }
   }
+
   minimizeButtonClicked() {
     if (this.unlocksService.isUnlocked(Unlockables.Minimize)) {
       alert(
@@ -61,12 +64,7 @@ export class HomePageComponent {
         'Charge Attack takes an extra turn, but deals massive damage'
       );
     }
-    const confirmed = confirm(
-      'You need to defeat a powerful foe for this spell. Are you ready?'
-    );
-    if (confirmed) {
-      this.router.navigateByUrl('combat-page?encounter=404');
-    }
+    alert('Find the King to learn charge attack');
   }
 
   fireballConfirm() {
@@ -89,12 +87,7 @@ export class HomePageComponent {
         'Blinding Light blinds all enemies causing them to sometimes miss.'
       );
     }
-    const confirmed = confirm(
-      'You need to defeat a powerful foe for this spell. Are you ready?'
-    );
-    if (confirmed) {
-      this.router.navigateByUrl('combat-page?encounter=100');
-    }
+    alert('Find the Queen to learn BlindingLight');
   }
 
   demonlordConfirm() {
@@ -109,6 +102,7 @@ export class HomePageComponent {
       this.router.navigateByUrl('combat-page?encounter=999');
     }
   }
+
   combatButtonClicked() {
     const unlockedSpellsCount = this.unlocksService.getUnlockedSpells().length;
     const playerLevel = this.playerService.level;
