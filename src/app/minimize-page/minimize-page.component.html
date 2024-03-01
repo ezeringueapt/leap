@@ -24,24 +24,42 @@
   <p>A plant that preys on others.</p>
   <p>The fish that gives it scales away.</p>
 
-  <div class="flex flex-row w-full flex-wrap justify-center">
+  <div class="flex flex-row w-full flex-wrap justify-center gap-1">
     <img
       *ngIf="!isBlueStoneUnlocked()"
       src="assets/questionBlock.png"
       alt="Question Mark"
-      style="width: 150px; height: 150px"
+      style="width: 100px; height: 100px"
+    />
+    <img
+      *ngIf="isBlueStoneUnlocked()"
+      src="assets/greencheck.png"
+      alt="Question Mark"
+      style="width: 100px; height: 100px"
     />
     <img
       *ngIf="!isEatingPlantUnlocked()"
       src="assets/questionBlock.png"
       alt="Question Mark"
-      style="width: 150px; height: 150px"
+      style="width: 100px; height: 100px"
+    />
+    <img
+      *ngIf="isEatingPlantUnlocked()"
+      src="assets/greencheck.png"
+      alt="Question Mark"
+      style="width: 100px; height: 100px"
     />
     <img
       *ngIf="!isRainbowFishUnlocked()"
       src="assets/questionBlock.png"
       alt="Question Mark"
-      style="width: 150px; height: 150px"
+      style="width: 100px; height: 100px"
+    />
+    <img
+      *ngIf="isRainbowFishUnlocked()"
+      src="assets/greencheck.png"
+      alt="Question Mark"
+      style="width: 100px; height: 100px"
     />
   </div>
 

@@ -106,7 +106,7 @@ export class HomePageComponent {
   combatButtonClicked() {
     const unlockedSpellsCount = this.unlocksService.getUnlockedSpells().length;
     const playerLevel = this.playerService.level;
-    if (playerLevel > unlockedSpellsCount * 2) {
+    if (playerLevel >= unlockedSpellsCount * 2) {
       alert(
         `Your level (${playerLevel}) is 2x your number of spells (${unlockedSpellsCount}), Learn more spells to level up`
       );

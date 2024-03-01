@@ -32,6 +32,9 @@ export class CombatPageComponent {
       }
       this.monsters = this.encounterTableService.getEncounter(+encounterNumber);
       this.gameState = 'fighting';
+      if (queryParams['playerLevel']) {
+        this.player.setLevel(queryParams['playerLevel']);
+      }
     });
   }
 
@@ -59,29 +62,25 @@ export class CombatPageComponent {
   }
 
   private postActionPhase() {
+    const unfilteredMonsters = this.monsters;
+    this.monsters = this.monsters.filter((monster) => !monster.isDefeated());
+
     this.monsters.forEach((monster) => {
-      if (!monster.isDefeated()) {
-        const log = monster.takeAction();
-        this.combatLogService.addLine(log);
-      }
+      const log = monster.takeAction(this.monsters);
+      this.combatLogService.addLine(log);
     });
 
     if (this.player.hp <= 0) {
       this.gameState = 'lost';
     }
 
-    const allMonstersDefeated = this.monsters.reduce(
-      (isDefeated, monster) => isDefeated && monster.isDefeated(),
-      true
-    );
-
-    if (allMonstersDefeated) {
+    if (this.monsters.length === 0) {
       this.player.levelUp();
       this.combatLogService.addLine(
-        'You win and level up gaining 3 hp and 3 damage'
+        'You win and level up gaining 10 hp, 3 mp, and 3 attack.'
       );
       this.gameState = 'win';
-      this.monsters.forEach((monster) => monster.reward());
+      unfilteredMonsters.forEach((monster) => monster.reward());
     }
   }
 

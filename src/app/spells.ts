@@ -72,11 +72,11 @@ export namespace Unlockables {
 
   export class Minimize extends Spell {
     placeToGoAfterUnlock = Pages.Home;
-    target: TargetingType = 'single';
+    target: TargetingType = 'all';
     mpCost = 8;
-    action = (monster: Monster) => {
-      monster.giveStatus('minimized');
-      return `${monster.name} has been minimized and will take extra damage`;
+    action = (_: Monster, monsters: Monster[]) => {
+      monsters.forEach((monster) => monster.giveStatus('minimized'));
+      return `All foes have been minimized and will take extra damage`;
     };
   }
 
@@ -110,9 +110,9 @@ export namespace Unlockables {
   export class Heal extends Spell {
     placeToGoAfterUnlock = Pages.Home;
     target: TargetingType = 'self';
-    mpCost = 8;
+    mpCost = 10;
     action = () => {
-      const ammountToHeal = Math.floor(this.playerService.maxHp * 0.4);
+      const ammountToHeal = Math.floor(this.playerService.maxHp * 0.5);
       this.playerService.hp += ammountToHeal;
       if (this.playerService.hp > this.playerService.maxHp) {
         this.playerService.hp = this.playerService.maxHp;
@@ -124,9 +124,9 @@ export namespace Unlockables {
   export class Fireball extends Spell {
     target: TargetingType = 'single';
     placeToGoAfterUnlock = Pages.Home;
-    mpCost = 8;
+    mpCost = 10;
     action = (monster: Monster) => {
-      const dmgDealt = monster.takeDamage(30);
+      const dmgDealt = monster.takeDamage(this.playerService.damage + 30);
       return `Fireball does ${dmgDealt} fire damnge to ${monster.name}`;
     };
   }
@@ -134,9 +134,8 @@ export namespace Unlockables {
   export class Icebeam extends Spell {
     target: TargetingType = 'all';
     placeToGoAfterUnlock = Pages.Home;
-    mpCost = 8;
+    mpCost = 10;
     action = (_: Monster, monsters: Monster[]) => {
-      this.playerService.mp -= 8;
       monsters.forEach((monster) => monster.takeDamage(20));
 
       return `Icebeam does 20 ice damage to all enemies`;
@@ -150,7 +149,7 @@ export namespace Unlockables {
     action = (_: Monster, monsters: Monster[]) => {
       monsters.forEach((monster) => {
         if (monster.name === 'Demon Lord') {
-          monster.hp = 100;
+          monster.hp = 1000;
           this.combatLogService.addLine(
             'The Demon Lord is weakend by the light'
           );

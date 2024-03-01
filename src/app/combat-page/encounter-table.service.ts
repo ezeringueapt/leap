@@ -16,6 +16,7 @@ import {
 import { PlayerService } from './player.service';
 import { UnlocksService } from '../unlocks.service';
 import { getRandomNumberArbitrary } from '../utils/get-random-number-arbitrary';
+import { CombatLogService } from './combat-log.service';
 
 @Injectable({
   providedIn: 'root',
@@ -23,7 +24,8 @@ import { getRandomNumberArbitrary } from '../utils/get-random-number-arbitrary';
 export class EncounterTableService {
   constructor(
     private playerService: PlayerService,
-    private unlocksService: UnlocksService
+    private unlocksService: UnlocksService,
+    private combatLogService: CombatLogService
   ) {}
 
   getEncounter(encounterNumber: number) {
@@ -47,13 +49,10 @@ export class EncounterTableService {
           [this.slime(), this.slime()],
         ];
       case 3:
-        return [
-          [this.slime(), this.slime()],
-          [this.skeleton(), this.skeleton()],
-        ];
+        return [[this.slime(), this.slime(), this.slime()], [this.skeleton()]];
       case 4:
         return [
-          [this.slime(), this.slime(), this.slime()],
+          [this.slime(), this.skeleton(), this.slime()],
           [this.skeleton(), this.skeleton(), this.skeleton()],
         ];
       case 5:
@@ -64,67 +63,127 @@ export class EncounterTableService {
         ];
       case 6:
         return [
-          [this.slime(), this.slime(), this.slime()],
-          [this.skeleton(), this.skeleton(), this.skeleton()],
-          [this.scorpion()],
+          [this.slime(), this.scorpion(), this.slime()],
+          [this.skeleton(), this.scorpion(), this.skeleton()],
+          [this.dragon()],
         ];
       case 7:
         return [
-          [this.slime(), this.slime(), this.slime()],
+          [this.slime(), this.scorpion(), this.skeleton()],
           [this.skeleton(), this.skeleton(), this.skeleton()],
           [this.scorpion(), this.scorpion()],
         ];
       case 8:
         return [
-          [this.slime(), this.slime(), this.slime()],
+          [this.slime(), this.dragon(), this.slime()],
           [this.skeleton(), this.skeleton(), this.skeleton()],
           [this.scorpion(), this.scorpion()],
           [this.dragon()],
         ];
       case 9:
         return [
-          [this.skeleton(), this.skeleton(), this.skeleton()],
-          [this.scorpion(), this.scorpion(), this.scorpion()],
-          [this.dragon()],
+          [this.skeleton(), this.scorpion(), this.skeleton()],
+          [this.scorpion(), this.dragon(), this.scorpion()],
+          [this.dragon(), this.dragon()],
         ];
 
       case 89:
-        return [[new Golem(this.playerService, this.unlocksService)]];
+        return [
+          [
+            new Golem(
+              this.playerService,
+              this.unlocksService,
+              this.combatLogService
+            ),
+          ],
+        ];
       case 404:
-        return [[new King(this.playerService, this.unlocksService)]];
+        return [
+          [
+            new King(
+              this.playerService,
+              this.unlocksService,
+              this.combatLogService
+            ),
+          ],
+        ];
       case 99:
         return [
           [
-            new Firebird(this.playerService, this.unlocksService),
-            new Icebird(this.playerService, this.unlocksService),
+            new Firebird(
+              this.playerService,
+              this.unlocksService,
+              this.combatLogService
+            ),
+            new Icebird(
+              this.playerService,
+              this.unlocksService,
+              this.combatLogService
+            ),
           ],
         ];
       case 100:
-        return [[new Queen(this.playerService, this.unlocksService)]];
+        return [
+          [
+            new Queen(
+              this.playerService,
+              this.unlocksService,
+              this.combatLogService
+            ),
+          ],
+        ];
       case 999:
-        return [[new DemonLord(this.playerService, this.unlocksService)]];
+        return [
+          [
+            new DemonLord(
+              this.playerService,
+              this.unlocksService,
+              this.combatLogService
+            ),
+          ],
+        ];
       default:
         throw new Error('No Encounter Found for that number');
     }
   }
 
   imp() {
-    return new Imp(this.playerService, this.unlocksService);
+    return new Imp(
+      this.playerService,
+      this.unlocksService,
+      this.combatLogService
+    );
   }
 
   slime() {
-    return new Slime(this.playerService, this.unlocksService);
+    return new Slime(
+      this.playerService,
+      this.unlocksService,
+      this.combatLogService
+    );
   }
 
   skeleton() {
-    return new Skeleton(this.playerService, this.unlocksService);
+    return new Skeleton(
+      this.playerService,
+      this.unlocksService,
+      this.combatLogService
+    );
   }
 
   scorpion() {
-    return new Scorpion(this.playerService, this.unlocksService);
+    return new Scorpion(
+      this.playerService,
+      this.unlocksService,
+      this.combatLogService
+    );
   }
 
   dragon() {
-    return new Dragon(this.playerService, this.unlocksService);
+    return new Dragon(
+      this.playerService,
+      this.unlocksService,
+      this.combatLogService
+    );
   }
 }

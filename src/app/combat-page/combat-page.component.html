@@ -50,28 +50,28 @@
   </div>
 
   <div>
-    <p *ngIf="gameState === 'lost'">
-      You Died!
+    <div *ngIf="gameState === 'lost'">
+      <div class="text-6xl text-red-800">YOU DIED</div>
       <app-spell-button bgColor="bg-blue-500" (click)="returnHome()"
         >Return Home</app-spell-button
       >
-    </p>
+    </div>
   </div>
   <div>
-    <p *ngIf="gameState === 'win'">
-      You Win!
+    <div *ngIf="gameState === 'win'">
+      <div class="text-6xl text-yellow-600">YOU WIN</div>
       <app-spell-button bgColor="bg-blue-500" (click)="returnHome()"
         >Return Home</app-spell-button
       >
-    </p>
+    </div>
   </div>
   <div>
-    <p *ngIf="gameState === 'error'">
-      An Error Occured
+    <div *ngIf="gameState === 'error'">
+      <div class="text-6xl text-red-800">ERROR</div>
       <app-spell-button bgColor="bg-blue-500" (click)="returnHome()"
         >Return Home</app-spell-button
       >
-    </p>
+    </div>
   </div>
 
   <div><p *ngIf="gameState === 'loading'">Loading</p></div>
