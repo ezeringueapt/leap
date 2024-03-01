@@ -91,7 +91,7 @@ export class Scorpion extends Monster {
     if (dmgToDeal < 0) {
       dmgToDeal = 0;
     }
-    return this.takeDamageHelper(dmgToDeal - 30);
+    return this.takeDamageHelper(dmgToDeal);
   };
 
   takeAction = () => {
@@ -167,7 +167,7 @@ export class Icebird extends Monster {
     if (dmgToDeal < 0) {
       dmgToDeal = 0;
     }
-    return this.takeDamageHelper(dmgToDeal - 30);
+    return this.takeDamageHelper(dmgToDeal);
   };
 
   takeAction = () => {
